@@ -24,24 +24,24 @@ export const resolvers = {
 		toggleFavorite: async (_: any, { id }: { id: string }, context: any) => {
 			if (!context.isAdmin) throw new Error("Unauthorized");
 			const resource = await prisma.resource.findUnique({
-				where: { id: Number(id) },
+				where: { id },
 			});
 
 			if (!resource) throw new Error("Resource not found");
 
 			return prisma.resource.update({
-				where: { id: Number(id) },
+				where: { id },
 				data: { isFavorite: !resource.isFavorite },
 			});
 		},
 		deleteResource: async (_: any, { id }: { id: string }, context: any) => {
 			if (!context.isAdmin) throw new Error("Unauthorized");
 			const resource = await prisma.resource.findUnique({
-				where: { id: Number(id) },
+				where: { id },
 			});
 			if (!resource) throw new Error("Resource not found");
 
-			await prisma.resource.delete({ where: { id: Number(id) } });
+			await prisma.resource.delete({ where: { id } });
 			return { success: true, message: "Resource deleted successfully" };
 		},
 	},

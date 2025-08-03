@@ -9,13 +9,13 @@ A GraphQL API backend for managing developer resources, built with Apollo Server
 - **Category System** - Organize resources by categories (TOOL, COURSE, DOCS, VIDEO, UIKIT)
 - **Favorites** - Mark and toggle favorite resources
 - **Admin Authentication** - Admin-only operations with email-based authentication
-- **PostgreSQL Database** - Robust data persistence with Prisma ORM
+- **MongoDB Database** - NoSQL database with Prisma ORM
 - **TypeScript** - Full type safety and better developer experience
 
 ## 📋 Prerequisites
 
 - Node.js (v16 or higher)
-- PostgreSQL database
+- MongoDB database (local or cloud)
 - npm or yarn package manager
 
 ## 🛠️ Installation
@@ -37,9 +37,28 @@ A GraphQL API backend for managing developer resources, built with Apollo Server
    Create a `.env` file in the root directory:
 
    ```env
-   DATABASE_URL="postgresql://username:password@localhost:5432/dev_resources"
+   # For MongoDB Atlas (cloud)
+   DATABASE_URL="mongodb+srv://username:password@cluster.mongodb.net/dev_resources?retryWrites=true&w=majority"
+
+   # For local MongoDB
+   # DATABASE_URL="mongodb://localhost:27017/dev_resources"
+
    ADMIN_EMAIL="your-admin-email@example.com"
    ```
+
+   **MongoDB Setup Options:**
+
+   **Option A: MongoDB Atlas (Cloud)**
+
+   - Sign up at [MongoDB Atlas](https://www.mongodb.com/atlas)
+   - Create a new cluster
+   - Get your connection string from the cluster dashboard
+   - Replace `username`, `password`, and `cluster` with your actual values
+
+   **Option B: Local MongoDB**
+
+   - Install MongoDB locally
+   - Use the local connection string: `mongodb://localhost:27017/dev_resources`
 
 4. **Database Setup**
 
@@ -47,8 +66,11 @@ A GraphQL API backend for managing developer resources, built with Apollo Server
    # Generate Prisma client
    npm run generate
 
-   # Run database migrations
-   npm run migrate
+   # Push schema to database
+   npm run db:push
+
+   # Seed database with sample data
+   npm run db:seed
    ```
 
 ## 🚀 Running the Application
@@ -199,7 +221,7 @@ The API uses a simple email-based admin authentication system:
 
 ## 🗄️ Database Schema
 
-The application uses PostgreSQL with the following main models:
+The application uses MongoDB with the following main models:
 
 - **User** - User accounts and authentication
 - **Resource** - Developer resources with categories and favorites
@@ -227,7 +249,8 @@ dev-resources-backend/
 - `npm run build` - Build the TypeScript project
 - `npm run start` - Start production server
 - `npm run generate` - Generate Prisma client
-- `npm run migrate` - Deploy database migrations
+- `npm run db:push` - Push schema changes to database
+- `npm run db:seed` - Seed database with sample data
 
 ## 🧪 Development
 
@@ -239,14 +262,14 @@ dev-resources-backend/
 4. Run migrations: `npm run migrate`
 5. Test with GraphQL Playground
 
-### Database Migrations
+### Database Schema Changes
 
 ```bash
-# Create a new migration
-npx prisma migrate dev --name migration_name
+# Push schema changes to database
+npm run db:push
 
-# Deploy migrations to production
-npm run migrate
+# Seed database with sample data
+npm run db:seed
 ```
 
 ## 🤝 Contributing
@@ -260,6 +283,26 @@ npm run migrate
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**Database Connection Error**
+
+- Ensure your MongoDB connection string is correct
+- For MongoDB Atlas, make sure your IP is whitelisted
+- Check that your database user has the correct permissions
+
+**Prisma Client Generation**
+
+- Run `npm run generate` after schema changes
+- Clear node_modules and reinstall if needed: `rm -rf node_modules && npm install`
+
+**Environment Variables**
+
+- Make sure your `.env` file is in the root directory
+- Verify the DATABASE_URL format: `mongodb+srv://...` for Atlas or `mongodb://...` for local
 
 ## 🆘 Support
 
